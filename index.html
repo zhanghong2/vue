@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <title> New Document </title>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="vue.js">
+  </script>
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+ </head>
+
+ <body>
+  
+	
+	<div id="counter-event-example">
+		<div>
+			sync修饰符的使用
+		</div>
+		<comp :foo.sync="bar"></comp>
+		<span>绑定的bar值为------{{bar}}</span>
+		<br/><br/><br/>
+		<div>
+			组件子向父组件传参--在表单输入点击send
+		</div>
+		<span>{{total}}</span>
+		<button-counter @child-info="get" ></button-counter>
+		<br/><br/><br/>
+		<div>
+			组件子向父组件传参--native  原生操作
+		</div>
+		<span>{{total}}</span>
+		<button-counter @child-info="get" v-on:click.native='doTheThing'></button-counter>
+	</div>
+	
+  <script type="text/javascript">
+  
+Vue.component('button-counter', {
+  template: "<div><input type='text' v-model='ceshi'>  <button @click='send' >send</button>  </div>",
+  data:function () {
+    return {
+      ceshi: ''
+    }
+  },
+  methods: {
+    send:function(){
+		this.$emit('child-info',this.ceshi);
+	}
+  },
+})
+
+Vue.component('comp', {
+  props:['foo'],
+  template: "<div>{{foo}}<button @click='send'>点击</button></div>",
+  data:function () {
+    return {
+      fa: ''
+    }
+  },
+  methods: {
+    send:function(){
+		this.$emit('update:foo', 'ee')
+		//this.$emit('child-info',this.ceshi);
+	}
+  },
+})
+var aa=new Vue({
+  el: '#counter-event-example',
+  data: {
+    total: '',
+	bar:'aa'
+	},
+  methods: {
+	get:function(msg){
+		this.total=msg;
+	},
+	doTheThing:function(){
+		alert('执行这,为组件添加原生事件');
+	}
+  }
+})
+  </script>
+ </body>
+</html>
